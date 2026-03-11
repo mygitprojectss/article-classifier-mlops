@@ -1,35 +1,52 @@
 import sys
 import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
 import pandas as pd
 import pickle
-
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 
 from src.preprocessing.clean_text import clean_text
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-df = pd.read_csv("data/train.csv")
 
-df["text"] = df["Title"] + " " + df["Description"]
 
-df["text"] = df["text"].apply(clean_text)
+def train_model():
 
-X = df["text"]
+    # load dataset
+    df = pd.read_csv("data/train.csv")
 
-y = df["Class Index"]
+    # combine title + description
+    df["text"] = df["Title"] + " " + df["Description"]
 
-vectorizer = TfidfVectorizer(max_features=5000)
+    # clean text
+    df["text"] = df["text"].apply(clean_text)
 
-X_vec = vectorizer.fit_transform(X)
+    X = df["text"]
+    y = df["Class Index"]
 
-model = LogisticRegression()
+    # vectorization
+    vectorizer = TfidfVectorizer(max_features=5000)
+    X_vec = vectorizer.fit_transform(X)
 
-model.fit(X_vec,y)
+    # model
+    model = LogisticRegression(max_iter=200)
 
-pickle.dump(model,open("models/ml_model.pkl","wb"))
+    model.fit(X_vec, y)
 
-pickle.dump(vectorizer,open("models/vectorizer.pkl","wb"))
+    # create models folder
+    os.makedirs("models", exist_ok=True)
 
-print("Training completed")
+    # save model
+    with open("models/ml_model.pkl", "wb") as f:
+        pickle.dump(model, f)
+
+    with open("models/vectorizer.pkl", "wb") as f:
+        pickle.dump(vectorizer, f)
+
+    print("Training completed and model saved")
+
+
+if __name__ == "__main__":
+    train_model()

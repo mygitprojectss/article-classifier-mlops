@@ -1,10 +1,22 @@
+import os
 import pickle
 
 from src.preprocessing.clean_text import clean_text
 
-model = pickle.load(open("models/ml_model.pkl","rb"))
 
-vectorizer = pickle.load(open("models/vectorizer.pkl","rb"))
+# auto train if model not present
+if not os.path.exists("models/ml_model.pkl"):
+
+    from src.training.train_ml import train_model
+    train_model()
+
+
+with open("models/ml_model.pkl","rb") as f:
+    model = pickle.load(f)
+
+with open("models/vectorizer.pkl","rb") as f:
+    vectorizer = pickle.load(f)
+
 
 def predict(text):
 
@@ -12,6 +24,6 @@ def predict(text):
 
     vec = vectorizer.transform([text])
 
-    pred = model.predict(vec)[0]
+    prediction = model.predict(vec)[0]
 
-    return pred
+    return prediction
