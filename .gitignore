@@ -9,16 +9,16 @@ venv/
 env/
 .venv/
 
-# # Dataset
-# data/
-# dataset/
-# datasets/
-# archive/
-# *.csv
-# *.tsv
-# *.zip
-# *.rar
-# *.7z
+# Dataset
+data/
+dataset/
+datasets/
+archive/
+*.csv
+*.tsv
+*.zip
+*.rar
+*.7z
 
 # Notebooks
 notebooks/
