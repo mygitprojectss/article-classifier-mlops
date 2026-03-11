@@ -1,7 +1,12 @@
+# streamlit
+# pandas
+# numpy
+# scikit-learn
+# torch
+# transformers
+# joblib
+
 streamlit
 pandas
-numpy
-scikit-learn
-torch
-transformers
-joblib
+numpy==1.26.4
+scikit-learn==1.3.2
